@@ -12,9 +12,28 @@ datasource db {
   provider = "postgresql"
 }
 
-model PlayerBoard { 
+model Map {
+  id Int @id @default(autoincrement())
+  title String
+  phighters PhighterLocations[]
+  leaderboard PlayerScore[]
+}
+
+model PlayerScore { 
   id    Int     @id @default(autoincrement()) 
   name  String @unique
   timeTakenMs Int
+  createdAt DateTime @default(now())
+  map Map @relation(fields: [mapId], references: [id])
+  mapId Int @unique
 } 
+
+model PhighterLocations {
+  id Int @id @default(autoincrement())
+  name String
+  coordX Float
+  coordY Float
+  map Map @relation(fields: [mapId], references: [id])
+  mapId Int
+}
 
