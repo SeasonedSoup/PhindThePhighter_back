@@ -3,7 +3,7 @@ const { Router } = require('express');
 
 const validateCoordRouter = Router();
 
-validateCoordRouter.get('/', validateController.validateCoordinate);
+validateCoordRouter.post('/', validateController.validateCoordinate);
 
 module.exports = validateCoordRouter
 

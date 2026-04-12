@@ -6,9 +6,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use('/', validateCoordRouter);
-//TESTS
+//TESTS 0.753, Y: 0.726 location of coil
 
 test('It is validating / validate route works', done => {
-    request(app).get('/').expect("Content-Type", /json/).
-    expect({message: 'validating'}).expect(200, done)
+    request(app).post('/').type('json').send({coordinates: {x: 0.753, y: 0.726}, character: 'Coil'})
 })
