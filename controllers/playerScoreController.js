@@ -5,9 +5,12 @@ async function createPlayerScore(req, res) {
     const score = req.body.score
 
     if (name.length > 16 || name.length < 1) {
-        return res.status(400).json({message: "Invalid name created. try again"});
+        return res.status(400).json({message: "Invalid name submitted. try again"});
     }
 
+    if (score < 0 ) {
+         return res.status(400).json({message: "Invalid score submitted. try again"});
+    }
     try {
         await prisma.playerScore.create({
             data: {
