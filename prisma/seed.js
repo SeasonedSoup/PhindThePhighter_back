@@ -6,17 +6,14 @@ async function main() {
             title: 'BoggioSKatePark'
         }
     })
-    const phighter = await prisma.phighterLocations.create({
-        data: {
-            name: 'Coil',
-            coordX: 0.753,
-            coordY: 0.726,
-            mapId: 1
-        }
+    const phighter = await prisma.phighterLocations.createMany({
+        data: [
+            {name: 'Coil', coordX: 0.753, coordY: 0.726, mapId: 1 },
+            {name: 'Medkit', coordX: 0.591, coordY: 0.127, mapId: 1 },
+            {name: 'Sword', coordX: 0.131, coordY: 0.682, mapId: 1 }
+        ],
+        skipDuplicates: true
     })
-
-    console.log(map);
-    console.log(phighter);
     console.log("Seed tested successfully");
 }
 

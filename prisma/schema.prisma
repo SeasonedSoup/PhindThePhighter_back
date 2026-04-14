@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
-
+//TO BE UPDATED npx prisma migrate reset to reset all structure and data
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -21,11 +21,11 @@ model Map {
 
 model PlayerScore { 
   id    Int     @id @default(autoincrement()) 
-  name  String @unique
+  name  String 
   timeTakenMs Int
   createdAt DateTime @default(now())
   map Map @relation(fields: [mapId], references: [id])
-  mapId Int @unique
+  mapId Int 
 } 
 
 model PhighterLocations {

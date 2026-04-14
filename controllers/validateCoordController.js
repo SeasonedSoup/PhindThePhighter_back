@@ -4,7 +4,7 @@ const validateCoordinate = async (req, res) => {
     const coordinates = req.body.coordinates;
     const character = req.body.character;
     try {
-        const answer = await prisma.phighterLocations.findUnique({
+        const answer = await prisma.phighterLocations.findFirst({
         where: {
             name: character
         },
@@ -15,12 +15,18 @@ const validateCoordinate = async (req, res) => {
         }
         })
 
+        if (!answer) {
+            return res.status(404).json({message: `${character} does not exist`, status: 'Not Found'});
+        }
+
         const tolerance = 0.050
-        if (Math.abs(coordinates.x - answer.coordX) <= tolerance 
-        && Math.abs(coordinates.y - answer.coordY) <= tolerance) {
-            return res.status(200).json({message: `You found ${answer.name}`})
+        const diffX = Math.abs(coordinates.x - answer.coordX)
+        const diffY = Math.abs(coordinates.y - answer.coordY)
+
+        if ( diffX.toFixed(3) <= tolerance && diffY.toFixed(3) <= tolerance) {   
+                return res.status(200).json({message: `You found ${answer.name}`, status: 'Found'})
             } else {
-                return res.status(200).json({message: `Wrong coordinates`})
+                return res.status(200).json({message: `Wrong coordinates ${answer.name} not found`, status: 'Not Found'})
             }
     } catch (err) {
         console.error(err)

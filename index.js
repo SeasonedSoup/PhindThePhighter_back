@@ -1,7 +1,8 @@
+const validateCoordRouter = require('./routes/validateCoordRoute');
+const playerScoreRouter = require ("./routes/playerScoreRoute");
 require('dotenv').config();
 
 const express = require('express');
-const {prisma} = require('./lib/prisma');
 const cors = require('cors');
 
 const PORT = process.env.PORT;
@@ -11,6 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use('/', validateCoordRouter);
+app.use('/', playerScoreRouter);
 app.get('/', (req, res) => {
     res.send("HI IM AN API FOR PHIND")
 })
