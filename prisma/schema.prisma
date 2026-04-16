@@ -21,11 +21,13 @@ model Map {
 
 model PlayerScore { 
   id    Int     @id @default(autoincrement()) 
-  name  String 
+  name  String  
   timeTakenMs Int
   createdAt DateTime @default(now())
   map Map @relation(fields: [mapId], references: [id])
   mapId Int 
+
+  @@unique([name, mapId])
 } 
 
 model PhighterLocations {

@@ -25,7 +25,20 @@ async function createPlayerScore(req, res) {
         console.error("Error", err)
         return res.status(400).json({error: "Error creating score"});
     }
-    
+}
+
+async function getTopTenMap(req, res) {
+    try {
+        const result = await prisma.playerScore.findMany({
+            where: {
+                mapId: req.mapId
+            },
+            take: 10,
+            orderBy: {timeTakenMs : 'asc'}
+        })
+    } catch (err) {
+        return err
+    }
 }
 
 module.exports = {
