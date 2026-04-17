@@ -31,16 +31,19 @@ async function getTopTenMap(req, res) {
     try {
         const result = await prisma.playerScore.findMany({
             where: {
-                mapId: req.mapId
+                mapId: Number(req.params.mapId)
             },
             take: 10,
             orderBy: {timeTakenMs : 'asc'}
         })
+
+        return res.status(200).json(result);
     } catch (err) {
-        return err
+        return res.status(404).json({error: "Error fetching score"});
     }
 }
 
 module.exports = {
-    createPlayerScore
+    createPlayerScore,
+    getTopTenMap
 }
