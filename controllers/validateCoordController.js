@@ -1,8 +1,11 @@
 const { prisma } = require('../lib/prisma');
+const jwt = require('jsonwebtoken');
 
 const validateCoordinate = async (req, res) => {
     const coordinates = req.body.coordinates;
     const character = req.body.character;
+    const gameData = req.gameData
+
     try {
         const answer = await prisma.phighterLocations.findFirst({
         where: {
@@ -24,7 +27,16 @@ const validateCoordinate = async (req, res) => {
         const diffY = Math.abs(coordinates.y - answer.coordY)
 
         if ( diffX.toFixed(3) <= tolerance && diffY.toFixed(3) <= tolerance) {   
-                return res.status(200).json({message: `You found ${answer.name}`, status: 'Found'})
+                if (!gameData.phighters.includes(character)) {
+                    gameData.phighters.push(character);
+                }
+
+                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, pauseTime: gameData.pauseTime},
+                        process.env.JWT_SECRET,
+                        {expiresIn: '10m'}
+                );
+
+                return res.status(200).json({message: `You found ${answer.name}`, status: 'Found', token: newToken})
             } else {
                 return res.status(200).json({message: `Wrong coordinates ${answer.name} not found`, status: 'Not Found'})
             }
