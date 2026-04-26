@@ -6,4 +6,5 @@ const playerScoreRouter = Router();
 
 playerScoreRouter.post('/create', playerScoreController.createPlayerScore);
 playerScoreRouter.get('/:mapId/mapInfo', playerScoreController.getTopTenMap);
+playerScoreRouter.get('/leaderboard/:mapId' , playerScoreController.getTopHundredLb);
 module.exports = playerScoreRouter

@@ -3,6 +3,7 @@ const { prisma } = require("../lib/prisma");
 async function createPlayerScore(req, res) {
     const name = req.body.name
     const score = req.body.score
+    const mapId = req.body.mapId
 
     if (name.length > 16 || name.length < 1) {
         return res.status(400).json({message: "Invalid name submitted. try again"});
@@ -16,7 +17,7 @@ async function createPlayerScore(req, res) {
             data: {
                 name: name,
                 timeTakenMs: score,
-                mapId: 1 //tbc
+                mapId: mapId
             }
         })
 
@@ -39,11 +40,31 @@ async function getTopTenMap(req, res) {
 
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(404).json({error: "Error fetching score"});
+        return res.status(404).json({error: "Error fetching score or mapId does not exist"});
+    }
+}
+
+async function getTopHundredLb(req, res) {
+
+    console.log("fetching")
+    try {
+        const result = await prisma .playerScore.findMany({
+            where: {
+                mapId: Number(req.params.mapId)
+            }, 
+            take: 100, 
+            orderBy: {timeTakenMs: 'asc'}
+        })
+
+        return res.status(200).json(result);
+    } catch (err) {
+        console.log(err)
+        return res.status(404).json({error: "Error fetching score or mapId does not exist"});
     }
 }
 
 module.exports = {
     createPlayerScore,
-    getTopTenMap
+    getTopTenMap,
+    getTopHundredLb
 }
