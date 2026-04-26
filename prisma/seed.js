@@ -1,10 +1,13 @@
 const {prisma} = require('../lib/prisma')
 
 async function main() {
-    const map = await prisma.map.create({
-        data: {
-            title: 'BoggioSKatePark'
-        }
+    const map = await prisma.map.createMany({
+        data: [
+            {title: 'BoggioSkatePark'} ,
+            {title: 'RobloxMuseum'},
+            {title: 'CraterdustCapital'}
+        ],
+        skipDuplicates: true
     })
     const phighter = await prisma.phighterLocations.createMany({
         data: [
@@ -23,7 +26,7 @@ async function main() {
         ],
         skipDuplicates: true
     })
-    console.log("Seed tested successfully", phighter);
+    console.log("Seed tested successfully", phighter, map);
 }
 
 
