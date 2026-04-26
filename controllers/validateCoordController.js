@@ -30,11 +30,14 @@ const validateCoordinate = async (req, res) => {
                 if (!gameData.phighters.includes(character)) {
                     gameData.phighters.push(character);
                 }
+                
 
-                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, pauseTime: gameData.pauseTime},
+                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, pauseTime: gameData.pauseTime, map: gameData.map},
                         process.env.JWT_SECRET,
                         {expiresIn: '10m'}
                 );
+
+                console.log(newToken)
 
                 return res.status(200).json({message: `You found ${answer.name}`, status: 'Found', token: newToken})
             } else {
