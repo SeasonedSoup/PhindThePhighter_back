@@ -4,13 +4,13 @@ require("dotenv").config();
 async function giveUserToken(req, res) {
     const mapId = req.body.mapId
 
-    jwt.sign({timeStarted: Date.now(), phighters: [], pauseTime: 0, mapId: mapId},
+    jwt.sign({timeStarted: Date.now(), phighters: [], mapId: mapId, score: null},
         process.env.JWT_SECRET,
         {expiresIn: '10m'}, (err, token) => {
             if (err) {
                 return res.status(401).json({error: "Error in processing the token has occured"})
             }
-            return res.status(200).json({token});
+            return res.status(200).json(token);
         }
     )
 }

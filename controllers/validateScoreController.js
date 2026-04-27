@@ -1,13 +1,9 @@
 const {prisma} = require('../lib/prisma');
+const jwt = require('jsonwebtoken')
 require('dotenv').config();
 
-afterAll(async () => {
-  await prisma.$disconnect();
-});
-
 //final verif
-async function verifyWinningCondition(req, res, next) {
-    console.log("VERIFYING");
+async function verifyWinningCondition(req, res) {
     const gameData = req.gameData
     try {
         const requiredLength = await prisma.phighterLocations.count({
@@ -18,9 +14,15 @@ async function verifyWinningCondition(req, res, next) {
 
         if (requiredLength !== gameData.phighters.length) return res.status(400).send('Total Phighters in map does not match with how many phighters you have found') 
     
-        if ((Date.now() - gameData.timeStarted) - gameData.pauseTime < 0) return res.status(400).send('Negative number time does not match'); 
-
-        next();
+        const serverScore = Date.now() - gameData.timeStarted - 3000 //countdownms
+        console.log(serverScore);
+        
+        const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, mapId: gameData.mapId, score: serverScore},
+                                process.env.JWT_SECRET,
+                                {expiresIn: '10m'}
+                        );
+        
+        return res.json({token: newToken, score: serverScore});
     } catch (err) {
         return res.status(400).send('Error finding count of phighters');
     }

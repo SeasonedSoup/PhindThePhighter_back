@@ -9,7 +9,8 @@ const validateCoordinate = async (req, res) => {
     try {
         const answer = await prisma.phighterLocations.findFirst({
         where: {
-            name: character
+            name: character,
+            mapId: gameData.mapId
         },
         select: {
             coordX: true,
@@ -32,7 +33,7 @@ const validateCoordinate = async (req, res) => {
                 }
                 
 
-                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, pauseTime: gameData.pauseTime, mapId: gameData.mapId},
+                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, mapId: gameData.mapId, score: null},
                         process.env.JWT_SECRET,
                         {expiresIn: '10m'}
                 );

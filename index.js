@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const validateScoreRouter = require('./routes/validateScoreRoute');
 
 const PORT = process.env.PORT;
 const app = express();
@@ -14,6 +15,8 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/', validateCoordRouter);
 app.use('/', playerScoreRouter);
+app.use('/', validateScoreRouter);
+
 app.get('/', (req, res) => {
     res.send("HI IM AN API FOR PHIND")
 })

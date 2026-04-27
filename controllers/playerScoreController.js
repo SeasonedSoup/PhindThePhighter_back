@@ -2,7 +2,7 @@ const { prisma } = require("../lib/prisma");
 
 async function createPlayerScore(req, res) {
     const name = req.body.name
-    const score = req.body.score
+    const score = req.gameData.score
     const mapId = req.gameData.mapId
 
     if (name.length > 16 || name.length < 1) {
@@ -15,13 +15,13 @@ async function createPlayerScore(req, res) {
     try {
         await prisma.playerScore.create({
             data: {
-                name: name,
+                name: name.trim(),
                 timeTakenMs: score,
                 mapId: Number(mapId)
             }
         })
 
-        return res.status(201).json({message: "Name created successfully"});
+        return res.status(201).json({message: "Name created successfully", score: score});
     } catch (err) {
         console.error("Error", err)
         return res.status(400).json({error: "Error creating score"});
