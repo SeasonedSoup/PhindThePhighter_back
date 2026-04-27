@@ -32,12 +32,12 @@ const validateCoordinate = async (req, res) => {
                 }
                 
 
-                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, pauseTime: gameData.pauseTime, map: gameData.map},
+                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, pauseTime: gameData.pauseTime, mapId: gameData.mapId},
                         process.env.JWT_SECRET,
                         {expiresIn: '10m'}
                 );
 
-                console.log(newToken)
+                console.log("Got new token", newToken)
 
                 return res.status(200).json({message: `You found ${answer.name}`, status: 'Found', token: newToken})
             } else {
@@ -45,6 +45,7 @@ const validateCoordinate = async (req, res) => {
             }
     } catch (err) {
         console.error(err)
+        return res.status(500).json({ error: "Internal server error" });
     }
 
 }

@@ -15,6 +15,9 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "jest --setupFiles dotenv/config"
+    "test": "jest"
+  },
+  "jest": {
+    "setupFiles": ["dotenv/config"]
   }
 }

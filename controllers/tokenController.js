@@ -2,28 +2,23 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 async function giveUserToken(req, res) {
-    const mapName = req.body.mapName
-    const validMaps = ["BogioSkatepark", "RobloxMuseum", "CraterdustCapital"];
-    if (!validMaps.includes(mapName)) {
-        return res.status(400).json({ error: "Invalid map sent" });
-    }
+    const mapId = req.body.mapId
 
-    jwt.sign({timeStarted: Date.now(), phighters: [], pauseTime: 0, map: mapName},
+    jwt.sign({timeStarted: Date.now(), phighters: [], pauseTime: 0, mapId: mapId},
         process.env.JWT_SECRET,
         {expiresIn: '10m'}, (err, token) => {
             if (err) {
                 return res.status(401).json({error: "Error in processing the token has occured"})
             }
-            console.log(token);
             return res.status(200).json({token});
         }
     )
 }
 
-async function verifyToken(req, res) {
+async function verifyToken(req, res, next) {
     const bearerHeader = req.headers['authorization'];
 
-    if (bearerHeader === null) {
+    if (!bearerHeader) {
         return res.status(403).json({error: 'Forbidden needs a Bearer Header'});
     }
     const bearer = bearerHeader.split(" ");
@@ -31,7 +26,6 @@ async function verifyToken(req, res) {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        console.log("DECODED SUCCESS:", decoded); 
 
         req.gameData = decoded
         next();

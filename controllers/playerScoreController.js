@@ -3,7 +3,7 @@ const { prisma } = require("../lib/prisma");
 async function createPlayerScore(req, res) {
     const name = req.body.name
     const score = req.body.score
-    const mapId = req.body.mapId
+    const mapId = req.gameData.mapId
 
     if (name.length > 16 || name.length < 1) {
         return res.status(400).json({message: "Invalid name submitted. try again"});
@@ -17,7 +17,7 @@ async function createPlayerScore(req, res) {
             data: {
                 name: name,
                 timeTakenMs: score,
-                mapId: mapId
+                mapId: Number(mapId)
             }
         })
 
