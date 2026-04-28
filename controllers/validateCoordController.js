@@ -57,6 +57,3 @@ const validateCoordinate = async (req, res) => {
 module.exports = {
     validateCoordinate
 }
-
-//X:1098, Y:826 coil loc
-//add buffer / leeway

@@ -12,7 +12,7 @@ async function verifyWinningCondition(req, res) {
         }
         });
 
-        if (requiredLength !== gameData.phighters.length) return res.status(400).send('Total Phighters in map does not match with how many phighters you have found') 
+        if (requiredLength !== gameData.phighters.length) return res.status(404).send('Total Phighters in map does not match with how many phighters you have found') 
     
         const serverScore = Date.now() - gameData.timeStarted - 3000 //countdownms
         
