@@ -23,7 +23,7 @@ const validateCoordinate = async (req, res) => {
             return res.status(404).json({message: `${character} does not exist`, status: 'Not Found'});
         }
 
-        const tolerance = 0.050
+        const tolerance = 0.075;
         const diffX = Math.abs(coordinates.x - answer.coordX)
         const diffY = Math.abs(coordinates.y - answer.coordY)
 
@@ -37,8 +37,6 @@ const validateCoordinate = async (req, res) => {
                         process.env.JWT_SECRET,
                         {expiresIn: '10m'}
                 );
-
-                console.log("Got new token", newToken)
 
                 return res.status(200).json({message: `You found ${answer.name}`, status: 'Found', token: newToken})
             } else {
