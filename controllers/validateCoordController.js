@@ -26,22 +26,27 @@ const validateCoordinate = async (req, res) => {
         const tolerance = 0.075;
         const diffX = Math.abs(coordinates.x - answer.coordX)
         const diffY = Math.abs(coordinates.y - answer.coordY)
-
-        if ( diffX.toFixed(3) <= tolerance && diffY.toFixed(3) <= tolerance) {   
-                if (!gameData.phighters.includes(character)) {
-                    gameData.phighters.push(character);
-                }
+        const found = diffX <= tolerance && diffY <= tolerance
+        const newChar = !gameData.phighters.includes(character)
+        if (found && newChar) {   
+              gameData.phighters.push(character);
+        }
                 
 
-                const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, mapId: gameData.mapId, score: null},
-                        process.env.JWT_SECRET,
-                        {expiresIn: '10m'}
+        const newToken = jwt.sign({timeStarted: gameData.timeStarted, phighters: gameData.phighters, mapId: gameData.mapId, score: null},
+                process.env.JWT_SECRET,
+                {expiresIn: '10m'}
                 );
 
-                return res.status(200).json({message: `You found ${answer.name}`, status: 'Found', token: newToken})
-            } else {
-                return res.status(200).json({message: `Wrong coordinates ${answer.name} not found`, status: 'Not Found'})
+        return res.status(200).json(
+            {
+                message: found ? `You found ${answer.name}` : `Wrong coordinates ${answer.name} not found`, 
+                status: found ? 'Found' : 'Not Found', 
+                token: newToken
             }
+        )
+
+        
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: "Internal server error" });
